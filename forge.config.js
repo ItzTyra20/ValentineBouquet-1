@@ -4,9 +4,9 @@ const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 module.exports = {
   packagerConfig: {
     asar: true,
+    extraResource: ['assets']   // <-- ADD THIS LINE
   },
-  rebuildConfig: {},
-  makers: [
+  rebuildConfig: {},  makers: [
     {
       name: '@electron-forge/maker-squirrel',
       config: {},
@@ -24,10 +24,6 @@ module.exports = {
         icon: 'assets/icon.png',
       },
     },
-    },
-    {
-      name: '@electron-forge/maker-rpm',
-      config: {},
     },
   ],
   plugins: [

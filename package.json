@@ -6,7 +6,8 @@
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "TMPDIR=/home/codespace/tmp2 umask 022 electron-forge make"
+    "make": "electron-forge make",
+    "start:watch": "nodemon --exec 'electron-forge start' ."
   },
   "author": "Betelgeuse",
   "license": "ISC",
