@@ -1,17 +1,17 @@
 window.addEventListener("DOMContentLoaded", () => {
   const flowerImages = [
-    "./assets/rose-straight.png",
-    "./assets/lys-straight.png",
-    "./assets/sunflower-straight.png",
-    "./assets/tulip-straight.png",
-    "./assets/babies-breath-straight.png",
-    "./assets/daisy-straight.png"
+    "assets/rose-straight.png",
+    "assets/lys-straight.png",
+    "assets/sunflower-straight.png",
+    "assets/tulip-straight.png",
+    "assets/babies-breath-straight.png",
+    "assets/daisy-straight.png"
   ];
 
   const vaseImages = [
-    "./assets/pink-vase-straight.png",
-    "./assets/green-vase-straight.png",
-    "./assets/blue-vase-straight.png"
+    "assets/pink-vase-straight.png",
+    "assets/green-vase-straight.png",
+    "assets/blue-vase-straight.png"
   ];
 
   //Get selected flowers and vase from localStorage

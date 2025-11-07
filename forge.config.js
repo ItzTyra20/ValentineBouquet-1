@@ -4,7 +4,6 @@ const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 module.exports = {
   packagerConfig: {
     asar: true,
-    extraResource: ['assets']   // <-- ADD THIS LINE
   },
   rebuildConfig: {},  makers: [
     {
@@ -21,7 +20,7 @@ module.exports = {
       options: {
         maintainer: 'Tyra Gipson <tyragip05@gmail.com>',
         homepage: 'https://github.com/ItzTyra20/ValentineBouquet-1',
-        icon: 'assets/icon.png',
+        icon: 'public/assets/icon.png',
       },
     },
     },

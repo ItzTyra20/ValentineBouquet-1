@@ -6,61 +6,68 @@ let win;
 
 function createWindow() {
   win = new BrowserWindow({
-    width: 550,
-    height: 600,
+    width: 800,
+    height: 1000,
+    resizable: false,
+    zoomFactor: 1.0,             // <--- ADD THIS LINE
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
-      preload: path.join(__dirname, "preload.js"),
-    },
-  });
-
+      preload: path.join(__dirname, "preload.js")
+  },
+});
   win.removeMenu();
-  win.loadFile("index.html");
-  //win.webContents.openDevTools();
-  
-  ipcMain.on("load-page", (event, page) => {
-    win.loadFile(page);
-  });  
 
-  ipcMain.on("capture-screenshot", async () => {
-    try {
-      const screenshotPath = await captureScreenshot();
-      win.webContents.send('screenshot-saved', screenshotPath);
-    } catch (error) {
-      console.error('Error capturing screenshot:', error);
-    }
+ // Add this to check the path
+  const indexPath = path.join(__dirname, "public", "index.html");
+  console.log("Loading HTML from:", indexPath);  // <-- This prints the path
+  
+  win.loadFile(indexPath);
+
+  win.once("ready-to-show", () => {
+    console.log("Window ready-to-show, now displaying");
+    win.show();
   });
 
-
+  win.webContents.openDevTools();
 }
 
-app.whenReady().then(() => {
-  createWindow();
-  app.on("activate", () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createWindow();
-    }
-  });
+  // IPC listeners outside createWindow
+ipcMain.on("load-page", (event, page) => {
+  if (win) win.loadFile(path.join(__dirname, "public", page));
+}); 
+
+ ipcMain.on("capture-screenshot", async () => {
+  try {
+    const screenshotPath = await captureScreenshot();
+    win.webContents.send('screenshot-saved', screenshotPath);
+  } catch (error) {
+    console.error('Error capturing screenshot:', error);
+  }
 });
 
 function captureScreenshot() {
   return new Promise((resolve, reject) => {
+    if (!win) return reject("No window to capture");
     win.capturePage().then(image => {
-      //Save screenshot to a file
       const filePath = path.join(app.getPath('downloads'), 'screenshot.png');
-      const imageBuffer = image.toPNG();
-      fs.writeFileSync(filePath, imageBuffer);  //Save screenshot to disk
-      resolve(filePath);  //Return saved screenshot file path
-    }).catch(err => {
-      console.error('Error capturing the application window:', err);
-      reject('Error capturing the application window');
-    });
+      fs.writeFileSync(filePath, image.toPNG());
+      resolve(filePath);
+    }).catch(err => reject(err));
   });
 }
 
+// App ready
+app.whenReady().then(() => {
+  console.log("creating window…");
+  createWindow();
+
+  app.on("activate", () => {
+    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+  });
+});
+
+// Quit app
 app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
-    app.quit();
-  }
+  if (process.platform !== "darwin") app.quit();
 });
